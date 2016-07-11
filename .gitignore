@@ -2,7 +2,10 @@ coco/
 coco-caption/
 model/
 .ipynb_checkpoints/
-vis/imgs/
-vis/vis.json
+#vis/imgs/
+#vis/vis.json
 testimages/
 checkpoints/
+
+vqa/
+vqa_OpenEnded_checkpoints/model_id01.t7

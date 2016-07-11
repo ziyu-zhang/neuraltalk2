@@ -34,7 +34,7 @@ cmd:option('-beam_size', 2, 'used when sample_max = 1, indicates number of beams
 cmd:option('-temperature', 1.0, 'temperature when sampling from distributions (i.e. when sample_max = 0). Lower = "safer" predictions.')
 -- For evaluation on a folder of images:
 cmd:option('-image_folder', '', 'If this is nonempty then will predict on the images in this folder path')
-cmd:option('-image_root', '', 'In case the image paths have to be preprended with a root path to an image folder')
+cmd:option('-image_root', 'vqa/images', 'In case the image paths have to be preprended with a root path to an image folder')
 -- For evaluation on MSCOCO images from some split:
 cmd:option('-input_h5','','path to the h5file containing the preprocessed dataset. empty = fetch from model checkpoint.')
 cmd:option('-input_json','','path to the json file containing additional info and vocab. empty = fetch from model checkpoint.')
