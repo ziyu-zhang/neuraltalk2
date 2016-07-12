@@ -24,7 +24,7 @@ cmd:option('-input_h5','vqa/vqaask.h5','path to the h5file containing the prepro
 cmd:option('-input_json','vqa/vqaask.json','path to the json file containing additional info and vocab')
 cmd:option('-cnn_proto','model/VGG_ILSVRC_16_layers_deploy.prototxt','path to CNN prototxt file in Caffe format. Note this MUST be a VGGNet-16 right now.')
 cmd:option('-cnn_model','model/VGG_ILSVRC_16_layers.caffemodel','path to CNN model file containing the weights, Caffe format. Note this MUST be a VGGNet-16 right now.')
-cmd:option('-start_from', '', 'path to a model checkpoint to initialize model weights from. Empty = don\'t')
+cmd:option('-start_from', 'vqa_OpenEnded_checkpoints/model_id01.t7', 'path to a model checkpoint to initialize model weights from. Empty = don\'t')
 
 -- Model settings
 cmd:option('-rnn_size',512,'size of the rnn in number of hidden nodes in each layer')
@@ -40,8 +40,8 @@ cmd:option('-seq_per_img',3,'number of captions to sample for each image during 
 -- Optimization: for the Language Model
 cmd:option('-optim','adam','what update to use? rmsprop|sgd|sgdmom|adagrad|adam')
 cmd:option('-learning_rate',4e-4,'learning rate')
-cmd:option('-learning_rate_decay_start', -1, 'at what iteration to start decaying learning rate? (-1 = dont)')
-cmd:option('-learning_rate_decay_every', 50000, 'every how many iterations thereafter to drop LR by half?')
+cmd:option('-learning_rate_decay_start', 0, 'at what iteration to start decaying learning rate? (-1 = dont)')
+cmd:option('-learning_rate_decay_every', 10000, 'every how many iterations thereafter to drop LR by half?')
 cmd:option('-optim_alpha',0.8,'alpha for adagrad/rmsprop/momentum/adam')
 cmd:option('-optim_beta',0.999,'beta used for adam')
 cmd:option('-optim_epsilon',1e-8,'epsilon that goes into denominator for smoothing')
@@ -54,7 +54,7 @@ cmd:option('-cnn_weight_decay', 0, 'L2 weight decay just for the CNN')
 
 -- Evaluation/Checkpointing
 cmd:option('-val_images_use', -1, 'how many images to use when periodically evaluating the validation loss? (-1 = all)')
-cmd:option('-save_checkpoint_every', 10000, 'how often to save a model checkpoint?')
+cmd:option('-save_checkpoint_every', 5000, 'how often to save a model checkpoint?')
 cmd:option('-checkpoint_path', 'vqa_OpenEnded_checkpoints', 'folder to save checkpoints into (empty = this folder)')
 cmd:option('-language_eval', 0, 'Evaluate language as well (1 = yes, 0 = no)? BLEU/CIDEr/METEOR/ROUGE_L? requires coco-caption code from Github.')
 cmd:option('-losses_log_every', 25, 'How often do we snapshot losses, for inclusion in the progress dump? (0 = disable)')
@@ -358,6 +358,8 @@ while true do
     learning_rate = learning_rate * decay_factor -- set the decayed rate
     cnn_learning_rate = cnn_learning_rate * decay_factor
   end
+
+  print(string.format('learning rate: %f', learning_rate))
 
   -- perform a parameter update
   if opt.optim == 'rmsprop' then
